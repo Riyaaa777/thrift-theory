@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Item | MoodCloset</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        .upload-container {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+
+        .upload-container:hover {
+            border-color: var(--color-gold);
+            background: var(--color-gold-light);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: var(--font-sans);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--color-gold);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">Mood<span>Closet</span></a>
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-link">My Wardrobe</a>
+                <a href="shop.html" class="nav-link">Marketplace</a>
+                <a href="#" class="nav-link active">Add Item</a>
+            </div>
+            <div class="nav-actions">
+                <a href="#" class="nav-link"><i data-lucide="user"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 800px; margin-top: 4rem; margin-bottom: 6rem;">
+        <h1 class="text-center" style="margin-bottom: 1rem;">Add to Collection</h1>
+        <p class="text-center" style="color: var(--color-text-secondary); margin-bottom: 3rem;">Upload a new piece to
+            your digital wardrobe or list it for sale.</p>
+
+        <form onsubmit="handleSubmit(event)">
+            <div class="upload-container" id="uploadZone">
+                <i data-lucide="upload-cloud"
+                    style="width: 48px; height: 48px; color: var(--color-gold); margin-bottom: 1rem;"></i>
+                <h3 style="margin-bottom: 0.5rem;">Add Photo</h3>
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+                    <button type="button" class="btn btn-primary"
+                        onclick="document.getElementById('fileInput').click()">
+                        Upload File
+                    </button>
+                    <button type="button" class="btn btn-outline" onclick="openGallery()">
+                        Pick from Gallery
+                    </button>
+                </div>
+                <input type="file" id="fileInput" hidden accept="image/*" onchange="previewImage(this)">
+                <div id="previewArea" style="margin-top: 1.5rem; display: none;">
+                    <img id="previewImg" src=""
+                        style="max-height: 200px; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                </div>
+            </div>
+
+            <!-- Gallery Modal -->
+            <div id="galleryModal"
+                style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center;">
+                <div
+                    style="background: white; width: 90%; max-width: 800px; padding: 2rem; border-radius: 12px; max-height: 80vh; overflow-y: auto;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h2>Select from Virtual Wardrobe</h2>
+                        <button type="button" onclick="closeGallery()"
+                            style="background:none; border:none; cursor:pointer;"><i data-lucide="x"></i></button>
+                    </div>
+                    <div class="grid-layout"
+                        style="margin-top: 0; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));">
+                        <img src="https://images.unsplash.com/photo-1616831089531-50e5883ef30b?q=80&w=1000&auto=format&fit=crop"
+                            class="gallery-item" onclick="selectFromGallery(this.src)" title="Kurti">
+                        <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=1000&auto=format&fit=crop"
+                            class="gallery-item" onclick="selectFromGallery(this.src)" title="Saree">
+                        <img src="https://images.unsplash.com/photo-1582559530495-2cc6870a3c26?q=80&w=1000&auto=format&fit=crop"
+                            class="gallery-item" onclick="selectFromGallery(this.src)" title="Jeans">
+                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1000&auto=format&fit=crop"
+                            class="gallery-item" onclick="selectFromGallery(this.src)" title="T-Shirt">
+                        <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?q=80&w=1000&auto=format&fit=crop"
+                            class="gallery-item" onclick="selectFromGallery(this.src)" title="Anarkali">
+                        <img src="https://images.unsplash.com/photo-1605763240004-7e93b172d754?q=80&w=1000&auto=format&fit=crop"
+                            class="gallery-item" onclick="selectFromGallery(this.src)" title="Cotton Dress">
+                        <img src="https://images.unsplash.com/photo-1601614769062-87063cc04b32?q=80&w=1000&auto=format&fit=crop"
+                            class="gallery-item" onclick="selectFromGallery(this.src)" title="Jhumkas">
+                        <img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=1000&auto=format&fit=crop"
+                            class="gallery-item" onclick="selectFromGallery(this.src)" title="Flats">
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                .gallery-item {
+                    width: 100%;
+                    height: 150px;
+                    object-fit: cover;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: transform 0.2s;
+                    border: 2px solid transparent;
+                }
+
+                .gallery-item:hover {
+                    transform: scale(1.05);
+                    border-color: var(--color-gold);
+                }
+            </style>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+                <div class="form-group">
+                    <label class="form-label">Item Name</label>
+                    <input type="text" class="form-input" placeholder="e.g. Cotton Kurti or Silk Saree" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-select">
+                        <option>Tops</option>
+                        <option>Bottoms</option>
+                        <option>Outerwear</option>
+                        <option>Shoes</option>
+                        <option>Accessories</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description (Optional)</label>
+                <textarea class="form-textarea" rows="4"
+                    placeholder="Tell us about the condition, brand, or story..."></textarea>
+            </div>
+
+            <div class="flex items-center gap-sm form-group">
+                <input type="checkbox" id="forSale" onchange="togglePrice()">
+                <label for="forSale">List this item for sale?</label>
+            </div>
+
+            <div class="form-group" id="priceGroup"
+                style="display: none; height: 0; overflow: hidden; transition: all 0.3s;">
+                <label class="form-label">Price (₹)</label>
+                <input type="number" class="form-input" placeholder="0.00">
+            </div>
+
+            <div class="text-center" style="margin-top: 3rem;">
+                <button type="submit" class="btn btn-primary" style="width: 200px;">Save Item</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <footer>
+        <div class="container" style="text-align: center;">
+            <p style="color: #999;">&copy; 2026 MoodCloset. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        gsap.from(".navbar", { duration: 1, y: -20, opacity: 0, ease: "power3.out" });
+        gsap.from(".container > *", { duration: 0.8, y: 30, opacity: 0, stagger: 0.1, delay: 0.2, ease: "power3.out" });
+
+        function previewImage(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const preview = document.getElementById('previewArea');
+                    const img = document.getElementById('previewImg');
+                    img.src = e.target.result;
+                    preview.style.display = 'block';
+                    gsap.from(preview, { duration: 0.5, opacity: 0, scale: 0.9 });
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Gallery Logic
+        function openGallery() {
+            const modal = document.getElementById('galleryModal');
+            modal.style.display = 'flex';
+            gsap.from("#galleryModal > div", { duration: 0.4, y: 50, opacity: 0, ease: "power3.out" });
+        }
+
+        function closeGallery() {
+            const modal = document.getElementById('galleryModal');
+            gsap.to(modal, {
+                duration: 0.2, opacity: 0, onComplete: () => {
+                    modal.style.display = 'none';
+                    modal.style.opacity = 1; // Reset for next open
+                }
+            });
+        }
+
+        function selectFromGallery(src) {
+            currentImageBase64 = src;
+            const preview = document.getElementById('previewArea');
+            const img = document.getElementById('previewImg');
+            img.src = src;
+            preview.style.display = 'block';
+            gsap.from(preview, { duration: 0.5, opacity: 0, scale: 0.9 });
+            closeGallery();
+        }
+
+        function togglePrice() {
+            const checkbox = document.getElementById('forSale');
+            const group = document.getElementById('priceGroup');
+            if (checkbox.checked) {
+                group.style.display = 'block';
+                group.style.height = 'auto'; // Auto height for input
+                gsap.from(group, { duration: 0.3, height: 0, opacity: 0 });
+            } else {
+                gsap.to(group, { duration: 0.3, height: 0, opacity: 0, onComplete: () => group.style.display = 'none' });
+            }
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i data-lucide="check-circle" style="color:var(--color-gold)"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            // Trigger animation
+            requestAnimationFrame(() => {
+                toast.classList.add('show');
+            });
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            // Mock submission
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.textContent;
+
+            btn.textContent = "Saving...";
+
+            setTimeout(() => {
+                showToast('Item added successfully!');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>
